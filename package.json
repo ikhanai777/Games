@@ -1,0 +1,12 @@
+{
+  "name": "pulsegon",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PULSEGON — a beat-locked, two-button survival game",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test game/test/*.test.mjs",
+    "smoke": "node tools/smoke.mjs"
+  }
+}
