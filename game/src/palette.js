@@ -40,7 +40,7 @@ function vividPalette(h) {
   const bgB = hsl(h, 0.5, 0.12);
   let l = 0.58;
   let wall = hsl(h, 1, l);
-  while ((contrast(wall, bgA) < MIN_CONTRAST + 0.6 || contrast(wall, bgB) < MIN_CONTRAST + 0.6) && l < 0.95) {
+  while ((contrast(wall, bgA) < MIN_CONTRAST + 1.5 || contrast(wall, bgB) < MIN_CONTRAST + 1.5) && l < 0.95) {
     l += 0.02;
     wall = hsl(h, 1, l);
   }

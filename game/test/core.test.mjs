@@ -107,3 +107,24 @@ test('config sanity', () => {
   assert.ok(HITBOX_HALF_DEG > 1.5 && HITBOX_HALF_DEG < 2.5);
   assert.equal(R_PLAYER, 0.2);
 });
+
+test('palettes keep ≥4.5:1 wall contrast, including mid-crossfade (§12.1)', async () => {
+  const { paletteFor, lerpPalette, contrast, MIN_CONTRAST } = await import('../src/palette.js');
+  const { MOVEMENTS } = await import('../src/config.js');
+  for (const mode of ['vivid', 'mono', 'cb']) {
+    for (const m of MOVEMENTS) {
+      for (let i = 0; i < m.hues.length; i++) {
+        const a = paletteFor(m, i, mode);
+        for (const next of [paletteFor(m, i + 1, mode), paletteFor(MOVEMENTS[(m.id + 1) % 6], 0, mode)]) {
+          for (let k = 0; k <= 1; k += 0.1) {
+            const p = lerpPalette(a, next, k);
+            for (const bg of [p.bgA, p.bgB]) {
+              const c = contrast(p.wall, bg);
+              assert.ok(c >= MIN_CONTRAST, `${mode} ${m.name} #${i} k=${k.toFixed(1)}: ${c.toFixed(2)}`);
+            }
+          }
+        }
+      }
+    }
+  }
+});
