@@ -267,11 +267,14 @@ export class Generator {
 // §11.4 fixed warm-up: two easy gates with the gap over the start position.
 function warmupEvents({ N, th, sp }) {
   const laneW = 360 / N;
-  const g = Math.floor(START_THETA / laneW);
+  // Open every lane the resting player touches (the start angle can sit on a lane edge).
+  const lo = Math.floor((START_THETA - 6) / laneW);
+  const hi = Math.floor((START_THETA + 6) / laneW);
+  const open1 = new Set([lo, hi].map((l) => (l + N) % N));
+  const open2 = new Set([...open1, (hi + 1) % N]);
   const e = [];
-  for (let i = 0; i < N; i++) if (i !== g) e.push({ beat: 0, lane: i, len: th, kind: 'solid' });
-  const g2 = (g + 1) % N;
-  for (let i = 0; i < N; i++) if (i !== g2 && i !== g) e.push({ beat: sp * 1.5, lane: i, len: th, kind: 'solid' });
+  for (let i = 0; i < N; i++) if (!open1.has(i)) e.push({ beat: 0, lane: i, len: th, kind: 'solid' });
+  for (let i = 0; i < N; i++) if (!open2.has(i)) e.push({ beat: sp * 1.5, lane: i, len: th, kind: 'solid' });
   return e;
 }
 

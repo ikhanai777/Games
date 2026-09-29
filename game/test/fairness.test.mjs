@@ -132,3 +132,15 @@ test('Gauntlet switches songs on bar lines', () => {
   const r = playWithBot(ctx, 190);
   assert.equal(r.died, false, `died at ${r.t?.toFixed(2)}s to "${r.pattern}"`);
 });
+
+test('an idle player survives the warm-up on every Movement (§11.4)', () => {
+  for (const movement of [0, 1, 2, 3, 4, 5]) {
+    const { gen, sim, walls } = setup({ movement, tier: 2, seed: 11 });
+    gen.fillUntil(8);
+    const warm = walls.filter((w) => w.pattern === 'warm-up');
+    assert.ok(warm.length > 0);
+    const end = Math.max(...warm.map((w) => w.tHit + w.len));
+    for (let i = 0; i < Math.round(end / DT) + 1; i++) step(sim, 0);
+    assert.ok(sim.alive, `Movement ${MOVEMENTS[movement].numeral}: idle player died at ${sim.death?.t.toFixed(2)}s`);
+  }
+});
