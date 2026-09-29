@@ -116,7 +116,12 @@ export class Input {
 
   // Gamepad polling, once per frame. Emits synthetic key events for menus.
   pollGamepad() {
-    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    let pads = [];
+    try {
+      pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    } catch {
+      return; // gamepads blocked by the embedding page's permissions policy
+    }
     const gp = [...pads].find((p) => p && p.connected);
     if (!gp) return;
     const btn = (i) => !!gp.buttons[i] && gp.buttons[i].pressed;
