@@ -12,7 +12,10 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <canvas id="game" aria-label="PULSEGON arena"></canvas>
+  <div id="stage">
+    <canvas id="game" aria-label="PULSEGON arena" hidden></canvas>
+    <canvas id="game3d" aria-label="PULSEGON arena in 3D"></canvas>
+  </div>
   <div id="hud" aria-live="polite"></div>
   <div id="overlay"></div>
   <noscript><p class="noscript">PULSEGON needs JavaScript.</p></noscript>

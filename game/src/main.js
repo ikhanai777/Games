@@ -10,17 +10,25 @@ import { solvePath } from './validator.js';
 import { createRng, hashString } from './rng.js';
 import { AudioEngine } from './audio.js';
 import { Renderer } from './render.js';
+import { Renderer3D } from './render3d.js';
 import { Input } from './input.js';
 import { paletteFor, lerpPalette, css } from './palette.js';
 import * as store from './storage.js';
 import { UI } from './ui.js';
 
 const canvas = document.getElementById('game');
+const canvas3d = document.getElementById('game3d');
 const data = store.load();
 const S = () => data.settings;
 const audio = new AudioEngine();
 const input = new Input(S);
 const renderer = new Renderer(canvas);
+let renderer3d = null;
+try {
+  renderer3d = new Renderer3D(canvas3d);
+} catch (e) {
+  console.warn('WebGL unavailable, using the flat view', e);
+}
 const timeline = new Timeline();
 
 const app = {
@@ -277,6 +285,12 @@ function updateDead(dt) {
 
 input.onKey((k) => {
   if (k.type !== 'down') return;
+  if (k.code === 'KeyV' && !k.repeat && ui.screen !== 'rebind') {
+    const v = app.cycleView();
+    if (app.state === 'playing' || app.state === 'dead') ui.callout(`${app.viewName(v).toUpperCase()} VIEW`);
+    else ui.render();
+    return;
+  }
   if (app.state === 'title') {
     app.leaveTitle();
     return;
@@ -393,7 +407,7 @@ function frame(now) {
   input.pollGamepad();
   if (app.state === 'playing') updateRun();
   else if (app.state === 'dead') updateDead(dt);
-  renderer.draw(buildView(dt));
+  drawView(buildView(dt));
   const accent = css(palCur.wall);
   if (accent !== lastAccent) {
     lastAccent = accent;
@@ -458,6 +472,7 @@ function buildView(dt) {
     echoLead: 0,
   };
   if (st.tilt && m.cam.tilt && !st.photosensitive) view.tiltY = 1 - m.cam.tilt * (0.5 + 0.5 * Math.sin((rel * Math.PI) / 8));
+  view.tiltAmt = 1 - view.tiltY;
 
   if (run) {
     const sim = run.sim;
@@ -509,8 +524,32 @@ function buildView(dt) {
   return view;
 }
 
+// Views: 3D top-down (default), 3D perspective, or the flat 2D renderer. Cosmetic only.
+const VIEWS = ['3d', 'perspective', 'flat'];
+const VIEW_NAMES = { '3d': '3D', perspective: 'Perspective', flat: 'Flat 2D' };
+app.has3d = () => !!(renderer3d && renderer3d.ok);
+app.viewName = (v) => VIEW_NAMES[v];
+app.cycleView = () => {
+  S().view = VIEWS[(VIEWS.indexOf(S().view) + 1) % VIEWS.length];
+  app.save();
+  return S().view;
+};
+
+let shownCanvas = null;
+function drawView(view) {
+  const use3d = S().view !== 'flat' && app.has3d();
+  const active = use3d ? canvas3d : canvas;
+  if (shownCanvas !== active) {
+    shownCanvas = active;
+    canvas.hidden = use3d;
+    canvas3d.hidden = !use3d;
+  }
+  if (use3d) renderer3d.draw(view, S().view === 'perspective');
+  else renderer.draw(view);
+}
+
 window.addEventListener('resize', () => renderer.resize());
-input.attach(window, canvas);
+input.attach(window, document.getElementById('stage'));
 app.pause = pause;
 app.ensureAudio = ensureAudio;
 app.leaveTitle = () => {

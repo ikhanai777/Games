@@ -4,6 +4,13 @@ A beat-locked, two-button survival game. Every wall is a note. The design is in 
 
 ## Play
 
+The arena is drawn in 3D by default. **Options → Camera view** (or **V** at any time) switches between:
+- **3D**: a camera straight above the center. The walls rise toward you.
+- **Perspective**: a tilted camera looking across the arena.
+- **Flat 2D**: the original look.
+
+The view is cosmetic only. Collisions and the fairness checks are identical in all three.
+
 ```sh
 npm start          # serves game/ at http://localhost:8080
 ```
@@ -17,6 +24,7 @@ The game has no build step and no dependencies. It is plain ES modules in `game/
 | Rewind after death | Hold ← | Hold left | Hold the left half |
 | Retry | → / Space / Enter | Right / A | Tap the right half |
 | Pause | Esc / P | Start | ‖ button |
+| Switch view (3D / Perspective / Flat) | V | — | Options → Camera view |
 
 ## Test
 
@@ -37,7 +45,8 @@ The fairness suite generates every stage (6 Movements × 3 tiers, many seeds), p
 | `game/src/patterns.js` | Pattern library, including a PGN (Pulsegon Notation) parser for hand-authored patterns |
 | `game/src/timeline.js` | Audio-clock ⇄ beat mapping with swing and tempo changes. It is the single source of musical time. |
 | `game/src/audio.js` | Procedural stem-based music (drums → bass → arp → pad → lead) and sound effects |
-| `game/src/render.js` | Canvas renderer: fractional-side polygons for morphs, wall types, space-time trail and escape path |
+| `game/src/render3d.js` | WebGL renderer (the default): extruded walls, flat lighting, fog, and a top-down or tilted perspective camera. A post-projection fit keeps the r = 1 disc filling the screen, so the reaction window is the same in every view. |
+| `game/src/render.js` | Flat 2D canvas renderer (fallback without WebGL, or chosen in Options); also owns the polygon-shape math both renderers share |
 | `game/src/main.js`, `ui.js` | State machine, run lifecycle, death cam, menus, HUD |
 
 ## Spec coverage

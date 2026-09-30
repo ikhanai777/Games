@@ -463,11 +463,21 @@ export class UI {
         return {
           title: 'Options',
           items: [
+            { separator: true, label: 'View' },
+            {
+              label: 'Camera view',
+              hint: app.has3d() ? 'Press V anytime to switch' : 'WebGL is unavailable, so only the flat view works here',
+              value: app.viewName(S.view),
+              left: () => setS('view', cycle(['3d', 'perspective', 'flat'], S.view, -1)),
+              right: () => setS('view', cycle(['3d', 'perspective', 'flat'], S.view, 1)),
+              enter: () => setS('view', cycle(['3d', 'perspective', 'flat'], S.view, 1)),
+            },
             { separator: true, label: 'Comfort' },
             {
-              label: 'Motion-sickness preset', hint: 'Rotation 20%, no tilt, no zoom, no flashes',
+              label: 'Motion-sickness preset', hint: 'Rotation 20%, no tilt, no zoom, no flashes, top-down view',
               enter: () => {
                 Object.assign(S, { rotation: 0.2, tilt: false, zoom: false, flashes: false });
+                if (S.view === 'perspective') S.view = '3d';
                 app.save();
               },
             },
@@ -546,7 +556,8 @@ export class UI {
           Touching the <b>side</b> of a wall just blocks you. Hitting it <b>head-on</b> ends the run.<br><br>
           <b>Graze</b> walls (pass very close) to charge Pulse. Press <b>both</b> rotate keys together, or <b>${KEYNAME(S.bindings.pulse[0])}</b>, to Pulse: for an eighth note you pass through <b>glass</b> (hatched) walls. Pulse on the beat for a PERFECT, which refunds half a charge. Pulse is never required.<br><br>
           <b>Pendulums</b> sway, then lock one beat before impact. <b>Shutters</b> (dashed) close on the off-beat. <b>Echoes</b> show a ghost one bar early. <b>Inverters</b> (striped) flip your controls for one bar.<br><br>
-          After a death, <b>hold left</b> to rewind and see the escape path; press <b>right</b> to retry.`,
+          After a death, <b>hold left</b> to rewind and see the escape path; press <b>right</b> to retry.<br><br>
+          Press <b>V</b> to switch between the 3D, perspective and flat views. The view never changes the gameplay.`,
         items: [],
       }),
 

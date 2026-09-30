@@ -118,6 +118,7 @@ export const MOVEMENTS = [
 ];
 
 export const DEFAULT_SETTINGS = {
+  view: '3d', // 3d (top-down) | perspective | flat
   rotation: 1, // §13 camera rotation intensity 0..1
   tilt: true,
   zoom: true,

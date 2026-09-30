@@ -87,11 +87,21 @@ try {
   await page.evaluate(() => {
     window.__pulsegon.app.store.unlockAll(window.__pulsegon.app.data);
   });
-  for (const [movement, tier] of [[4, 2], [5, 2], [2, 0], [3, 1]]) {
+  const views = ['3d', 'perspective', 'flat', 'perspective'];
+  const runs = [[4, 2], [5, 2], [2, 0], [3, 1]];
+  for (let i = 0; i < runs.length; i++) {
+    const [movement, tier] = runs[i];
+    await page.evaluate((v) => (window.__pulsegon.app.data.settings.view = v), views[i]);
     await page.evaluate(([m, t]) => window.__pulsegon.app.startRun({ mode: 'stage', movement: m, tier: t }), [movement, tier]);
     await sleep(3200);
-    await page.screenshot({ path: `${shots}/run-m${movement}-t${tier}.png` });
+    await page.screenshot({ path: `${shots}/run-m${movement}-t${tier}-${views[i]}.png` });
   }
+  // V cycles the view mid-run.
+  const before = await page.evaluate(() => window.__pulsegon.app.data.settings.view);
+  await page.keyboard.press('KeyV');
+  const after = await page.evaluate(() => window.__pulsegon.app.data.settings.view);
+  if (before === after) throw new Error('V did not change the view');
+  if (!(await page.evaluate(() => window.__pulsegon.app.has3d()))) errors.push('WebGL renderer failed to start');
   await page.evaluate(() => window.__pulsegon.app.startRun({ mode: 'gauntlet', movement: 0, tier: 0 }));
   await sleep(1000);
   await page.evaluate(() => window.__pulsegon.app.startRun({ mode: 'endless', movement: 1, tier: 1 }));

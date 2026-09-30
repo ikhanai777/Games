@@ -27,7 +27,8 @@ export class Input {
     return null;
   }
 
-  attach(target, canvas) {
+  // target: receives keys (window); surface: the element that takes touches (the stage).
+  attach(target, surface) {
     target.addEventListener('keydown', (e) => {
       const a = this.action(e.code);
       if (a || ['Space', 'ArrowUp', 'ArrowDown', 'Tab'].includes(e.code)) {
@@ -52,7 +53,7 @@ export class Input {
     });
 
     const side = (e) => (e.clientX < window.innerWidth / 2 ? 'left' : 'right');
-    canvas.addEventListener('pointerdown', (e) => {
+    surface.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse') return;
       e.preventDefault();
       const s = side(e);
@@ -67,8 +68,8 @@ export class Input {
       this.changed(e.timeStamp, s, false);
       for (const fn of this.listeners) fn({ type: 'up', code: 'Touch', action: s, ts: e.timeStamp, event: e });
     };
-    canvas.addEventListener('pointerup', up);
-    canvas.addEventListener('pointercancel', up);
+    surface.addEventListener('pointerup', up);
+    surface.addEventListener('pointercancel', up);
   }
 
   held(action) {
