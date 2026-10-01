@@ -4,6 +4,10 @@ A brick-breaker in the Brick Blast / Ballz style, with more to chase: roguelite 
 
 It is fully standalone: one file (`index.html`), no dependencies and no build step. It shares nothing with the rest of this repo.
 
+## Promo reel
+
+A 26-second Instagram Reel ad made from real gameplay is in [`marketing/`](marketing/README.md).
+
 ## Android
 
 A ready-to-install APK is at [`android/dist/Brickstorm.apk`](android/dist/Brickstorm.apk). See [`android/README.md`](android/README.md) for install and build steps.

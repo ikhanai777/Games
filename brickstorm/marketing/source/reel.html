@@ -1,0 +1,188 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:P;font-weight:600;src:url(poppins-600.woff2)}
+@font-face{font-family:P;font-weight:800;src:url(poppins-800.woff2)}
+@font-face{font-family:P;font-weight:900;src:url(poppins-900.woff2)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0820;font-family:P,system-ui,sans-serif;color:#fff}
+#bg{position:absolute;inset:0;background:radial-gradient(120% 60% at 50% 0%,#2a1a6e 0%,#0e0a2a 55%,#07051a 100%)}
+.blob{position:absolute;width:900px;height:900px;border-radius:50%;filter:blur(140px);opacity:.55}
+#b1{background:#2fd8ff}#b2{background:#ff3fd0}
+#grid{position:absolute;inset:0;background-image:linear-gradient(#ffffff07 2px,transparent 2px),linear-gradient(90deg,#ffffff07 2px,transparent 2px);background-size:90px 90px}
+#brand{position:absolute;top:84px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:16px;font-weight:900;font-size:40px;letter-spacing:.08em}
+#brand img{width:58px;height:58px;border-radius:14px;box-shadow:0 0 30px #a77bff88}
+#brand span{background:linear-gradient(90deg,#4df3ff,#a77bff,#ff4fd8);-webkit-background-clip:text;background-clip:text;color:transparent}
+#cap{position:absolute;top:168px;left:40px;right:40px;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#head{font-weight:900;font-size:96px;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;text-shadow:0 6px 0 #00000055,0 0 50px #a77bff88}
+#head .w{display:inline-block;margin:0 .14em}
+#head .hl{background:linear-gradient(90deg,#4df3ff,#a77bff 50%,#ff4fd8);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 24px #ff4fd877)}
+#head .gold{color:#ffd24a}
+#sub{margin-top:18px;font-weight:600;font-size:40px;color:#d9d3ff}
+#phone{position:absolute;left:50%;top:492px;width:646px;height:1396px;margin-left:-323px;border-radius:84px;background:#05040d;padding:16px;
+  box-shadow:0 0 0 3px #2c2560,0 0 90px #7d5cff66,0 50px 120px #000c;transform-origin:50% 40%}
+#screen{position:relative;width:100%;height:100%;border-radius:70px;overflow:hidden;background:#0b0820}
+#shot{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 45%}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#finger{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:radial-gradient(circle,#ffffffee 0 26%,#ffffff55 27% 45%,#ffffff00 46%);opacity:0;filter:drop-shadow(0 6px 14px #0008)}
+#ripple{position:absolute;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;border:8px solid #fff;opacity:0}
+#notch{position:absolute;top:22px;left:50%;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#000;box-shadow:0 0 0 3px #111}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0}
+#end img{width:330px;height:330px;border-radius:76px;box-shadow:0 0 0 4px #ffffff22,0 0 120px #a77bffaa,0 40px 80px #000a}
+#end h1{margin-top:70px;font-weight:900;font-size:124px;letter-spacing:.02em;background:linear-gradient(90deg,#4df3ff,#a77bff 50%,#ff4fd8);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 40px #a77bff99)}
+#end .tag{margin-top:10px;font-weight:600;font-size:44px;color:#e4defd}
+#chips{display:flex;gap:18px;margin-top:56px}
+.chip{background:#ffffff14;border:2px solid #ffffff26;border-radius:999px;padding:16px 30px;font-weight:800;font-size:34px}
+#cta{margin-top:80px;padding:34px 90px;border-radius:999px;font-weight:900;font-size:58px;color:#0b0820;background:linear-gradient(90deg,#3fd7ff,#a77bff,#ff4fd8);box-shadow:0 20px 70px #a77bff99}
+#plat{margin-top:34px;font-weight:600;font-size:36px;color:#b9b1e8}
+</style></head>
+<body>
+<div id="bg"></div><div class="blob" id="b1"></div><div class="blob" id="b2"></div><div id="grid"></div>
+<div id="brand"><img src="../../android/icon-512.png"><span>BRICKSTORM</span></div>
+<div id="cap"><div id="head"></div><div id="sub"></div></div>
+<div id="phone"><div id="screen"><img id="shot"><div id="finger"></div><div id="ripple"></div><div id="flash"></div><div id="notch"></div></div></div>
+<div id="end">
+  <img src="../../android/icon-512.png">
+  <h1>BRICKSTORM</h1>
+  <div class="tag">The brick breaker you can't put down</div>
+  <div id="chips"><div class="chip">📴 Plays offline</div><div class="chip">🚫 No ads</div><div class="chip">⚡ 60 KB</div></div>
+  <div id="cta">PLAY NOW ▶</div>
+  <div id="plat">Now on Android</div>
+</div>
+<script>
+const FPS = 30;
+let META = null;
+const $ = id => document.getElementById(id);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const easeOut = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+const easeBack = t => { t = clamp(t, 0, 1); const c = 1.9; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+
+// segments: [start, end) in seconds
+const SEG = [
+  { s: 0, e: 7.2, src: 'A', off: 0 },
+  { s: 7.2, e: 12.5, src: 'B', off: 0 },
+  { s: 12.5, e: 15.0, still: 'perk', tap: [0.5, 0.425, 1.3] },
+  { s: 15.0, e: 17.3, still: 'shop', tap: [0.76, 0.456, 1.2] },
+  { s: 17.3, e: 19.6, still: 'menu', tap: [0.5, 0.455, 1.2] },
+  { s: 19.6, e: 21.8, still: 'over' },
+  { s: 21.8, e: 26.0, end: true }
+];
+// captions: headline words ("*" = gradient highlight, "^" = gold) + sub line
+const CAPS = [
+  { s: 0.0, e: 1.55, h: 'ONE *SWIPE*', sub: 'drag to aim your whole squad' },
+  { s: 1.55, e: 3.6, h: '*60* BALLS. ONE SHOT.', sub: 'release and unleash the storm' },
+  { s: 3.6, e: 7.2, h: 'COMBO UP TO *×5*', sub: 'every hit plays the next note 🎵' },
+  { s: 7.2, e: 9.75, h: 'SMASH THE ^TITAN^ 👑', sub: 'a giant boss every 15 levels' },
+  { s: 9.75, e: 12.5, h: 'CLEAR THE *BOARD*', sub: 'bombs · lasers · lightning: chain it all 💥' },
+  { s: 12.5, e: 15.0, h: 'PICK A *POWER*', sub: 'a brand-new build every run' },
+  { s: 15.0, e: 17.3, h: 'UNLOCK *SKINS*', sub: '7 ball skins + permanent upgrades' },
+  { s: 17.3, e: 19.6, h: '*DAILY* CHALLENGE', sub: 'same board for everyone · missions · streaks 🔥' },
+  { s: 19.6, e: 21.8, h: 'BEAT YOUR ^BEST^', sub: '…then do it again 😈' }
+];
+let lastCap = null;
+function setCaption(c) {
+  if (c === lastCap) return;
+  lastCap = c;
+  $('head').innerHTML = c ? c.h.split(' ').map(w => {
+    const hl = w.match(/^\*(.*)\*$/), gd = w.match(/^\^(.*)\^$/);
+    return '<span class="w' + (hl ? ' hl' : gd ? ' gold' : '') + '">' + (hl ? hl[1] : gd ? gd[1] : w) + '</span>';
+  }).join(' ') : '';
+  $('sub').textContent = c ? c.sub : '';
+}
+const imgCache = {};
+function load(src) {
+  if (!imgCache[src]) { const im = new Image(); im.src = src; imgCache[src] = im.decode().then(() => im); }
+  return imgCache[src];
+}
+const pad = n => String(n).padStart(4, '0');
+
+async function setFrame(f) {
+  const t = f / FPS;
+  // background motion
+  $('b1').style.transform = `translate(${-250 + Math.sin(t * 0.6) * 180}px, ${-200 + Math.cos(t * 0.5) * 140}px)`;
+  $('b2').style.transform = `translate(${430 + Math.cos(t * 0.55) * 160}px, ${1150 + Math.sin(t * 0.7) * 160}px)`;
+  $('grid').style.backgroundPosition = `0 ${t * 40}px`;
+
+  const seg = SEG.find(s => t >= s.s && t < s.e) || SEG[SEG.length - 1];
+  const lt = t - seg.s;
+
+  // captions with pop-in animation
+  const cap = CAPS.find(c => t >= c.s && t < c.e);
+  setCaption(cap);
+  if (cap) {
+    const ct = t - cap.s, out = clamp((cap.e - t) / 0.12, 0, 1);
+    const ws = $('head').querySelectorAll('.w');
+    ws.forEach((w, i) => { const k = easeBack((ct - i * 0.07) / 0.32); w.style.transform = `scale(${0.4 + 0.6 * k}) translateY(${(1 - k) * 40}px)`; w.style.opacity = clamp((ct - i * 0.07) / 0.12, 0, 1) * out; });
+    const ks = easeOut((ct - 0.18) / 0.35);
+    $('sub').style.opacity = ks * out; $('sub').style.transform = `translateY(${(1 - ks) * 24}px)`;
+    $('cap').style.opacity = 1;
+  }
+
+  // brand bar fades away on the end card
+  const endT = seg.end ? lt : -1;
+  $('brand').style.opacity = seg.end ? clamp(1 - endT / 0.3, 0, 1) : 1;
+
+  // phone
+  const ph = $('phone');
+  if (seg.end) {
+    const k = easeOut(endT / 0.45);
+    ph.style.transform = `translateY(${k * 1400}px) scale(${1 - k * 0.2}) rotate(${k * 8}deg)`;
+    $('cap').style.opacity = 0;
+    const e = easeBack((endT - 0.25) / 0.6);
+    const end = $('end'); end.style.opacity = clamp((endT - 0.2) / 0.3, 0, 1);
+    end.querySelector('img').style.transform = `scale(${0.3 + 0.7 * e}) rotate(${(1 - e) * -20}deg)`;
+    end.querySelector('h1').style.transform = `translateY(${(1 - easeOut((endT - 0.45) / 0.5)) * 80}px)`;
+    end.querySelector('h1').style.opacity = clamp((endT - 0.45) / 0.3, 0, 1);
+    end.querySelector('.tag').style.opacity = clamp((endT - 0.7) / 0.3, 0, 1);
+    $('chips').querySelectorAll('.chip').forEach((c, i) => { const k2 = easeBack((endT - 0.9 - i * 0.12) / 0.4); c.style.opacity = clamp((endT - 0.9 - i * 0.12) / 0.15, 0, 1); c.style.transform = `scale(${0.5 + 0.5 * k2})`; });
+    const cta = $('cta'), kc = easeBack((endT - 1.4) / 0.45);
+    cta.style.opacity = clamp((endT - 1.4) / 0.2, 0, 1);
+    cta.style.transform = `scale(${(0.5 + 0.5 * kc) * (1 + 0.045 * Math.max(0, Math.sin((endT - 1.9) * 6)))})`;
+    $('plat').style.opacity = clamp((endT - 1.7) / 0.3, 0, 1);
+    return;
+  }
+  const punch = easeBack(lt / 0.35);
+  ph.style.transform = `scale(${0.93 + 0.07 * punch})`;
+  $('flash').style.opacity = clamp(0.55 - lt * 3.5, 0, 0.55) * (seg.s > 0 ? 1 : 0);
+
+  let src, zoom = 1;
+  if (seg.src) {
+    const sc = META.scenes[seg.src];
+    const idx = clamp(Math.floor(lt * FPS) + seg.off, 0, sc.frames - 1);
+    src = `frames/${seg.src}_${pad(idx)}.jpg`;
+    // finger while aiming
+    const fg = $('finger');
+    if (idx < sc.aimFrames && sc.finger[idx]) {
+      const r = META.canvasRect, p = sc.finger[idx];
+      fg.style.left = ((r.x + p.x / 420 * r.w) / r.vw * 100) + '%';
+      fg.style.top = ((r.y + p.y / 750 * r.h) / r.vh * 100) + '%';
+      fg.style.opacity = clamp(idx / 4, 0, 1) * clamp((sc.aimFrames - idx) / 3, 0, 1);
+    } else fg.style.opacity = 0;
+  } else {
+    src = `frames/${seg.still}.jpg`;
+    zoom = 1.2 + 0.06 * easeOut(lt / (seg.e - seg.s));
+    $('finger').style.opacity = 0;
+  }
+  if (!seg.src) zoom = 1.2 + 0.06 * easeOut(lt / (seg.e - seg.s));
+  // tap ripple on stills
+  const rp = $('ripple');
+  if (seg.tap) {
+    const tt = lt - seg.tap[2];
+    rp.style.left = (50 + (seg.tap[0] * 100 - 50) * zoom) + '%'; rp.style.top = (45 + (seg.tap[1] * 100 - 45) * zoom) + '%';
+    rp.style.opacity = tt > 0 && tt < 0.5 ? (1 - tt / 0.5) * 0.9 : 0;
+    rp.style.transform = `scale(${0.2 + clamp(tt / 0.5, 0, 1) * 0.9})`;
+    const fg = $('finger');
+    if (lt > seg.tap[2] - 0.4 && lt < seg.tap[2] + 0.35) {
+      fg.style.left = rp.style.left; fg.style.top = rp.style.top;
+      fg.style.opacity = clamp((lt - (seg.tap[2] - 0.4)) / 0.15, 0, 1) * clamp((seg.tap[2] + 0.35 - lt) / 0.15, 0, 1);
+      fg.style.transform = `scale(${tt > -0.05 && tt < 0.12 ? 0.85 : 1})`;
+    }
+  } else rp.style.opacity = 0;
+  const im = await load(src);
+  const shot = $('shot');
+  if (shot.getAttribute('src') !== src) { shot.src = im.src; await shot.decode().catch(() => {}); }
+  shot.style.transform = `scale(${zoom})`;
+}
+window.init = m => { META = m; };
+</script>
+</body></html>
