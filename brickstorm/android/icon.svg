@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="18 18 72 72" width="512" height="512">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24165a"/><stop offset="1" stop-color="#0b0820"/></linearGradient></defs>
+<rect x="18" y="18" width="72" height="72" rx="16" fill="url(#g)"/>
+<path fill="#4DF3FF" d="M33,30 h8 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-8 a3,3 0 0 1 -3,-3 v-8 a3,3 0 0 1 3,-3 z"/>
+<path fill="#A77BFF" d="M50,30 h8 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-8 a3,3 0 0 1 -3,-3 v-8 a3,3 0 0 1 3,-3 z"/>
+<path fill="#FF4FD8" d="M67,30 h8 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-8 a3,3 0 0 1 -3,-3 v-8 a3,3 0 0 1 3,-3 z"/>
+<path fill="#FFD24A" d="M33,47 h8 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-8 a3,3 0 0 1 -3,-3 v-8 a3,3 0 0 1 3,-3 z"/>
+<path fill="#FF6B5E" d="M67,47 h8 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-8 a3,3 0 0 1 -3,-3 v-8 a3,3 0 0 1 3,-3 z"/>
+<circle cx="54" cy="67.5" r="1.6" fill="#fff" opacity="0.8"/>
+<circle cx="54" cy="62" r="1.3" fill="#fff" opacity="0.6"/>
+<circle cx="54" cy="76" r="5" fill="#fff"/>
+</svg>

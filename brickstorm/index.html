@@ -1273,6 +1273,18 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
+// hooks for the Android shell (android/): hardware back button and app pause/resume
+window.brickstormBack = () => {
+  for (const id of ['how', 'shop']) if ($(id).classList.contains('show')) { hide(id); if (state === 'menu') openMenu(); return 'ok'; }
+  if (state === 'menu') return 'exit';
+  if (state === 'paused') { resume(); return 'ok'; }
+  if (state === 'over') { openMenu(); return 'ok'; }
+  if (state === 'perk' || state === 'dead') return 'ok';
+  pause(); return 'ok';
+};
+window.brickstormPause = () => { pause(); if (Sfx.ac && Sfx.ac.state === 'running') Sfx.ac.suspend(); };
+window.brickstormResume = () => { if (Sfx.ac && Sfx.ac.state === 'suspended') Sfx.ac.resume(); };
+
 // test hook for automated checks (harmless in normal play)
 window.__brickstorm = { get state() { return state; }, get run() { return run; }, get balls() { return balls; }, setAimAngle, fire, newRun, tick: () => tick() };
 
